@@ -1,0 +1,30 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #121212;
+    color: white;
+    text-align: center;
+  }
+  
+  .container {
+    margin: auto;
+    max-width: 900px;
+  }
+  
+  .counter {
+    display: flex;
+    justify-content: space-around;
+    margin: 10px 0;
+    font-size: 1.2em;
+  }
+  
+  .dem { color: #4b679e; }
+  .rep { color: #a07070; }
+  .tossup { color: #999; }
+  
+  object {
+    width: 100%;
+    height: auto;
+    border: 1px solid #444;
+    background: #1e1e1e;
+  }
+  

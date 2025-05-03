@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Interactive Electoral Map</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Electoral College Map</h1>
+    <div class="counter">
+      <span class="dem">Democrat: <span id="dem-count">0</span></span>
+      <span class="rep">Republican: <span id="rep-count">0</span></span>
+      <span class="tossup">Tossup: <span id="tossup-count">0</span></span>
+    </div>
+    <object id="map" type="image/svg+xml" data="map.svg"></object>
+    <p>Click a state to cycle through party colors.</p>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
