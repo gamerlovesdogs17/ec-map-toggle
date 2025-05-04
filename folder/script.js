@@ -16,11 +16,7 @@ let currentParty = "dem";
 
 function setActiveButton(party) {
   currentParty = party;
-
-  document.getElementById("dem-btn").classList.remove("active");
-  document.getElementById("rep-btn").classList.remove("active");
-  document.getElementById("tossup-btn").classList.remove("active");
-
+  document.querySelectorAll(".controls button").forEach(btn => btn.classList.remove("active"));
   document.getElementById(`${party}-btn`).classList.add("active");
 }
 
@@ -31,10 +27,10 @@ function getNextColor(current, shades) {
 
 function updateCounters() {
   let dem = 0, rep = 0, toss = 0;
-  document.querySelectorAll("path[state-id]").forEach(path => {
+  document.querySelectorAll("path[state-abbr]").forEach(path => {
     const color = path.getAttribute("fill");
-    const id = path.getAttribute("state-id");
-    const ev = electoralVotes[id] || 0;
+    const abbr = path.getAttribute("state-abbr");
+    const ev = electoralVotes[abbr.toUpperCase()] || 0;
 
     if (demShades.includes(color)) dem += ev;
     else if (repShades.includes(color)) rep += ev;
@@ -47,28 +43,22 @@ function updateCounters() {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  // Button click handlers
+  setActiveButton("dem");
+
   document.getElementById("dem-btn").onclick = () => setActiveButton("dem");
   document.getElementById("rep-btn").onclick = () => setActiveButton("rep");
   document.getElementById("tossup-btn").onclick = () => setActiveButton("tossup");
 
-  setActiveButton("dem"); // Set default
-
   const mapObj = document.getElementById("map");
   mapObj.addEventListener("load", () => {
     const svg = mapObj.contentDocument;
-    if (!svg) {
-      console.error("SVG not loaded or inaccessible");
-      return;
-    }
-
-    const paths = svg.querySelectorAll("path");
+    const paths = svg.querySelectorAll("path[region], path[short-name]");
 
     paths.forEach(path => {
-      const id = path.getAttribute("id");
-      if (!id) return;
+      const abbr = path.getAttribute("short-name")?.toUpperCase() || path.getAttribute("region")?.toUpperCase();
+      if (!abbr || !electoralVotes[abbr]) return;
 
-      path.setAttribute("state-id", id);
+      path.setAttribute("state-abbr", abbr);
       path.setAttribute("fill", tossupColor);
       path.style.cursor = "pointer";
 
