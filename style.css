@@ -1,103 +1,93 @@
 body {
-  background-color: #0b1120;
+  background-color: #0d1117;
   color: white;
-  font-family: sans-serif;
+  font-family: Arial, sans-serif;
   text-align: center;
+  margin: 0;
+  padding: 20px;
 }
 
 h1 {
-  margin-top: 20px;
+  font-size: 2.5em;
+  margin-bottom: 10px;
 }
 
 .button-container {
-  margin: 20px;
+  margin: 20px 0;
 }
 
-.party-button {
-  border: 2px solid white;
-  background: transparent;
-  color: white;
-  padding: 10px 15px;
+.select-button {
+  padding: 10px 20px;
   margin: 0 5px;
   font-size: 16px;
+  border: 2px solid white;
+  border-radius: 6px;
+  background-color: transparent;
+  color: white;
   cursor: pointer;
-  border-radius: 5px;
-  transition: all 0.2s ease-in-out;
 }
 
-.party-button.dem.selected {
-  background-color: #0b2e5e;
-  box-shadow: 0 0 5px #0b2e5e;
+.select-button.selected {
+  box-shadow: 0 0 10px white;
 }
 
-.party-button.rep.selected {
-  background-color: #8b0000;
-  box-shadow: 0 0 5px #8b0000;
-}
-
-.party-button.tossup.selected {
-  background-color: #bfbfbf;
-  color: black;
-  box-shadow: 0 0 5px #bfbfbf;
-  border-color: black;
-}
-
-object#map {
-  display: block;
-  margin: 0 auto;
-  width: 90%;
-  max-width: 1000px;
-  height: auto;
-  background-color: #1e1e1e;
-}
-
-/* Electoral bar styling */
-.ec-bar {
-  display: flex;
-  position: relative;
-  height: 50px;
+.bar-container {
   width: 90%;
   margin: 20px auto;
-  background-color: #bfbfbf;
+  height: 60px;
+  position: relative;
+}
+
+.bar {
+  display: flex;
+  width: 100%;
+  height: 100%;
   border-radius: 10px;
   overflow: hidden;
-  font-weight: bold;
-  font-size: 20px;
+  background-color: #ccc;
+  position: relative;
 }
 
 .bar-segment {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
   height: 100%;
-  transition: width 0.3s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
 }
 
-.bar-segment span {
-  position: relative;
-  z-index: 2;
+.democrat {
+  background-color: #003366;
 }
 
-.bar-segment.tossup {
-  background-color: #bfbfbf;
+.republican {
+  background-color: #8B0000;
+}
+
+.tossup {
+  background-color: #999;
   color: black;
 }
 
-.bar-segment.dem {
-  background-color: #0b2e5e;
-}
-
-.bar-segment.rep {
-  background-color: #8b0000;
-}
-
-.bar-marker {
+.target-line {
   position: absolute;
   left: 50.18%;
   top: 0;
   bottom: 0;
   width: 2px;
-  background: white;
-  z-index: 3;
+  background-color: white;
+}
+
+.map-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+#map {
+  width: 90%;
+  height: auto;
+  border: 1px solid #555;
 }
