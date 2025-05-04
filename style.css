@@ -42,6 +42,9 @@ h1 {
   border-radius: 10px;
   overflow: hidden;
   background-color: #c4c4c4;
+  font-weight: bold;
+  font-size: 20px;
+  color: white;
 }
 
 .bar {
@@ -49,9 +52,6 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  font-size: 20px;
-  color: white;
 }
 
 .dem-bar {
@@ -74,6 +74,7 @@ h1 {
   position: absolute;
   top: 0;
   bottom: 0;
+  left: 50.186%;
   width: 2px;
   background-color: white;
   z-index: 2;
