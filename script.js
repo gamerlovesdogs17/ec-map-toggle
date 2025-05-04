@@ -60,7 +60,6 @@ window.addEventListener("DOMContentLoaded", () => {
       const abbr = path.getAttribute("region")?.toUpperCase();
       if (!abbr || !electoralVotes[abbr]) return;
 
-      // Initialize color if needed
       if (!path.getAttribute("fill")) {
         path.setAttribute("fill", tossupColor);
       }
