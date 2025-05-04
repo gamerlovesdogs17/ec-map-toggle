@@ -14,9 +14,9 @@ const counts = {
 
 function setParty(party) {
   selectedParty = party;
-  document.querySelectorAll('.party-button').forEach(button => {
-    button.classList.remove('selected');
-  });
+  document.querySelectorAll('.party-button').forEach(btn =>
+    btn.classList.remove('selected')
+  );
   document.getElementById(`${party}-button`).classList.add('selected');
 }
 
@@ -42,26 +42,24 @@ function initializeMap() {
     const states = svgDoc.querySelectorAll("[value]");
 
     states.forEach(state => {
+      const value = parseInt(state.getAttribute("value")) || 0;
+      state.setAttribute("data-party", "tossup");
+      state.setAttribute("fill", partyColors.tossup);
+
       state.addEventListener("click", () => {
-        const value = parseInt(state.getAttribute("value"));
-        const current = state.getAttribute("data-party") || "tossup";
+        const prevParty = state.getAttribute("data-party");
+        if (prevParty === selectedParty) return;
 
         // Subtract from previous party
-        counts[current] -= value;
+        counts[prevParty] -= value;
 
-        // Update to new party
-        state.setAttribute("fill", partyColors[selectedParty]);
-        state.setAttribute("data-party", selectedParty);
+        // Add to selected party
         counts[selectedParty] += value;
+        state.setAttribute("data-party", selectedParty);
+        state.setAttribute("fill", partyColors[selectedParty]);
 
         updateCounts();
       });
-
-      // Initialize party color on page load
-      const initialParty = state.getAttribute("data-party") || "tossup";
-      const initialValue = parseInt(state.getAttribute("value"));
-      state.setAttribute("fill", partyColors[initialParty]);
-      counts[initialParty] += initialValue;
     });
 
     updateCounts();
@@ -70,5 +68,4 @@ function initializeMap() {
 
 window.onload = () => {
   initializeMap();
-  updateCounts();
 };
