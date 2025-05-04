@@ -1,25 +1,27 @@
 const demShades = ["#1B2A41", "#375A85", "#6A8DB5"];
 const repShades = ["#812B2B", "#B25B5B", "#D78B8B"];
 const tossupColor = "#C4C4C4";
-let currentParty = "dem";
 
+// Electoral votes per state
 const electoralVotes = {
   AL: 9, AK: 3, AZ: 11, AR: 6, CA: 54, CO: 10, CT: 7, DE: 3, FL: 30,
   GA: 16, HI: 4, ID: 4, IL: 19, IN: 11, IA: 6, KS: 6, KY: 8, LA: 8,
-  ME: 2, "ME-01": 1, "ME-02": 1, MD: 10, MA: 11, MI: 15, MN: 10, MS: 6,
-  MO: 10, MT: 4, NE: 2, "NE-01": 1, "NE-02": 1, "NE-03": 1, NV: 6,
-  NH: 4, NJ: 14, NM: 5, NY: 28, NC: 16, ND: 3, OH: 17, OK: 7, OR: 8,
-  PA: 19, RI: 4, SC: 9, SD: 3, TN: 11, TX: 40, UT: 6, VT: 3, VA: 13,
-  WA: 12, WV: 4, WI: 10, WY: 3, DC: 3
+  ME: 4, MD: 10, MA: 11, MI: 15, MN: 10, MS: 6, MO: 10, MT: 4, NE: 5,
+  NV: 6, NH: 4, NJ: 14, NM: 5, NY: 28, NC: 16, ND: 3, OH: 17, OK: 7,
+  OR: 8, PA: 19, RI: 4, SC: 9, SD: 3, TN: 11, TX: 40, UT: 6, VT: 3,
+  VA: 13, WA: 12, WV: 4, WI: 10, WY: 3, DC: 3
 };
+
+let currentParty = "dem"; // Default selected party
 
 document.getElementById("dem-btn").onclick = () => currentParty = "dem";
 document.getElementById("rep-btn").onclick = () => currentParty = "rep";
 document.getElementById("tossup-btn").onclick = () => currentParty = "tossup";
 
-function getNextColor(current, shades) {
-  const i = shades.indexOf(current);
-  return shades[(i + 1) % shades.length];
+function getNextColor(currentColor, party) {
+  const shades = party === "dem" ? demShades : repShades;
+  const index = shades.indexOf(currentColor);
+  return shades[(index + 1) % shades.length];
 }
 
 function updateCounters() {
@@ -54,11 +56,19 @@ document.getElementById("map").addEventListener("load", () => {
       const current = path.getAttribute("fill");
 
       if (currentParty === "dem") {
-        const next = demShades.includes(current) ? getNextColor(current, demShades) : demShades[0];
-        path.setAttribute("fill", next);
+        if (!demShades.includes(current)) {
+          path.setAttribute("fill", demShades[0]);
+        } else {
+          const next = getNextColor(current, "dem");
+          path.setAttribute("fill", next);
+        }
       } else if (currentParty === "rep") {
-        const next = repShades.includes(current) ? getNextColor(current, repShades) : repShades[0];
-        path.setAttribute("fill", next);
+        if (!repShades.includes(current)) {
+          path.setAttribute("fill", repShades[0]);
+        } else {
+          const next = getNextColor(current, "rep");
+          path.setAttribute("fill", next);
+        }
       } else {
         path.setAttribute("fill", tossupColor);
       }
