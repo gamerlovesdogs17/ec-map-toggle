@@ -1,8 +1,8 @@
 let currentParty = 'tossup';
 
 const partyColors = {
-  dem: ['#0f224d', '#405b96', '#627bb2'],
-  rep: ['#7c131a', '#c2424d', '#bf9673'],
+  dem: ['#0c2340', '#304d80', '#5f7db8'],
+  rep: ['#8b0000', '#b22222', '#e06666'],
   tossup: ['#c4c4c4']
 };
 
