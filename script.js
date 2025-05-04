@@ -1,53 +1,65 @@
-let currentParty = 'tossup';
-const partyCycle = ['tossup', 'democrat', 'republican'];
+let currentParty = "tossup";
 const partyColors = {
-  tossup: '#cccccc',
-  democrat: '#0c2340',
-  republican: '#8b0000'
+  democrat: "#375A85",
+  republican: "#B25B5B",
+  tossup: "#C4C4C4"
 };
-const voteCounts = {
+
+const counts = {
   democrat: 0,
   republican: 0,
   tossup: 538
 };
 
-document.querySelectorAll('.toggle-button').forEach(button => {
-  button.addEventListener('click', () => {
-    document.querySelectorAll('.toggle-button').forEach(b => b.classList.remove('active'));
-    button.classList.add('active');
-    currentParty = button.getAttribute('data-party');
-  });
-});
-
-function updateCounters() {
-  document.getElementById('dem-count').textContent = voteCounts.democrat;
-  document.getElementById('rep-count').textContent = voteCounts.republican;
-  document.getElementById('tossup-count').textContent = voteCounts.tossup;
+function updateCounts() {
+  document.getElementById("dem-count").textContent = counts.democrat;
+  document.getElementById("rep-count").textContent = counts.republican;
+  document.getElementById("tossup-count").textContent = counts.tossup;
 }
 
-document.querySelectorAll('#map path').forEach(state => {
-  const value = parseInt(state.getAttribute('value')) || 0;
-  state.setAttribute('data-party', 'tossup');
-  state.setAttribute('fill', partyColors.tossup);
+function setButtonActive(id) {
+  ["dem-btn", "rep-btn", "tossup-btn"].forEach(btn => {
+    document.getElementById(btn).classList.remove("active");
+  });
+  document.getElementById(id).classList.add("active");
+}
 
-  state.addEventListener('click', () => {
-    const current = state.getAttribute('data-party');
-    let nextParty = currentParty;
+document.getElementById("dem-btn").onclick = () => {
+  currentParty = "democrat";
+  setButtonActive("dem-btn");
+};
+document.getElementById("rep-btn").onclick = () => {
+  currentParty = "republican";
+  setButtonActive("rep-btn");
+};
+document.getElementById("tossup-btn").onclick = () => {
+  currentParty = "tossup";
+  setButtonActive("tossup-btn");
+};
 
-    if (current === currentParty) {
-      // Cycle through party gradients
-      const index = partyCycle.indexOf(current);
-      nextParty = partyCycle[(index + 1) % partyCycle.length];
-    }
+function handleStateClick(state) {
+  const currentFill = state.getAttribute("fill");
+  const ev = parseInt(state.getAttribute("value")) || 0;
 
-    state.setAttribute('data-party', nextParty);
-    state.setAttribute('fill', partyColors[nextParty]);
+  const previousParty = state.dataset.party || "tossup";
+  if (previousParty !== currentParty) {
+    counts[previousParty] -= ev;
+    counts[currentParty] += ev;
+    updateCounts();
 
-    // Update vote totals
-    voteCounts[current] -= value;
-    voteCounts[nextParty] += value;
-    updateCounters();
+    state.setAttribute("fill", partyColors[currentParty]);
+    state.dataset.party = currentParty;
+  }
+}
+
+document.getElementById("map").addEventListener("load", function () {
+  const svgDoc = this.contentDocument;
+  const states = svgDoc.querySelectorAll("[region]");
+
+  states.forEach(state => {
+    state.setAttribute("fill", partyColors.tossup);
+    state.dataset.party = "tossup";
+
+    state.addEventListener("click", () => handleStateClick(state));
   });
 });
-
-updateCounters();
