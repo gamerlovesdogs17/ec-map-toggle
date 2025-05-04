@@ -1,66 +1,72 @@
-let currentParty = "tossup";
-const partyGradients = {
-  democrat: ["#193B6D", "#345789", "#5673A5", "#7A93C2"],
-  republican: ["#6B0F0F", "#8B2F2F", "#AC4F4F", "#D06F6F"],
-  tossup: ["#C4C4C4"]
+let currentParty = null;
+const partyColors = {
+  Democrat: ["#223E64", "#2D4E7C", "#3C5F91", "#647B9F"],
+  Republican: ["#6D1D1D", "#8C2D2D", "#A54B4B", "#BC7E7E"],
+  Tossup: ["#C4C4C4"]
 };
-const partyTotals = {
-  democrat: 0,
-  republican: 0,
-  tossup: 538
-};
-const stateVotes = {};
 
-document.querySelectorAll(".toggle-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    currentParty = btn.id.replace("-btn", "");
-    updateButtonStyles();
+const voteCounts = {
+  Democrat: 0,
+  Republican: 0,
+  Tossup: 538
+};
+
+const stateData = {};
+
+document.querySelectorAll(".toggle-button").forEach(button => {
+  button.addEventListener("click", () => {
+    currentParty = button.dataset.party;
+    document.querySelectorAll(".toggle-button").forEach(btn => {
+      btn.classList.remove("selected");
+    });
+    button.classList.add("selected");
   });
 });
 
-function updateButtonStyles() {
-  document.querySelectorAll(".toggle-btn").forEach(btn => {
-    btn.classList.remove("active");
-  });
-  document.getElementById(`${currentParty}-btn`).classList.add("active");
-}
-
 function updateCounts() {
-  document.getElementById("dem-count").textContent = partyTotals.democrat;
-  document.getElementById("rep-count").textContent = partyTotals.republican;
-  document.getElementById("tossup-count").textContent = partyTotals.tossup;
+  document.getElementById("dem-count").textContent = voteCounts.Democrat;
+  document.getElementById("rep-count").textContent = voteCounts.Republican;
+  document.getElementById("tossup-count").textContent = voteCounts.Tossup;
 }
 
-document.getElementById("map").addEventListener("load", () => {
-  const svgDoc = document.getElementById("map").contentDocument;
-  const states = svgDoc.querySelectorAll("[region]");
+function changeStateColor(stateEl) {
+  if (!currentParty || !stateEl.hasAttribute("value")) return;
+  const stateId = stateEl.getAttribute("region") || stateEl.id;
+  const ev = parseInt(stateEl.getAttribute("value"), 10);
 
+  if (!stateData[stateId]) {
+    stateData[stateId] = {
+      party: "Tossup",
+      index: 0
+    };
+  }
+
+  const prevParty = stateData[stateId].party;
+  if (prevParty !== "Tossup") voteCounts[prevParty] -= ev;
+  else voteCounts.Tossup -= ev;
+
+  if (stateData[stateId].party !== currentParty) {
+    stateData[stateId].index = 0;
+    stateData[stateId].party = currentParty;
+  } else {
+    stateData[stateId].index = (stateData[stateId].index + 1) % partyColors[currentParty].length;
+  }
+
+  const color = partyColors[currentParty][stateData[stateId].index];
+  stateEl.style.fill = color;
+
+  voteCounts[currentParty] += ev;
+
+  updateCounts();
+}
+
+const mapObject = document.getElementById("map");
+mapObject.addEventListener("load", () => {
+  const svgDoc = mapObject.contentDocument;
+  const states = svgDoc.querySelectorAll("[value]");
   states.forEach(state => {
-    const stateId = state.getAttribute("region");
-    const votes = parseInt(state.getAttribute("value"), 10);
-    stateVotes[stateId] = votes;
-
-    state.setAttribute("data-party", "tossup");
-    state.setAttribute("data-gradient-index", "0");
-
-    state.addEventListener("click", () => {
-      let party = state.getAttribute("data-party");
-      let index = parseInt(state.getAttribute("data-gradient-index"));
-
-      if (party !== currentParty) {
-        partyTotals[party] -= stateVotes[stateId];
-        party = currentParty;
-        index = 0;
-      } else {
-        index = (index + 1) % partyGradients[party].length;
-      }
-
-      state.setAttribute("data-party", party);
-      state.setAttribute("data-gradient-index", index);
-      state.setAttribute("fill", partyGradients[party][index]);
-
-      partyTotals[party] += stateVotes[stateId];
-      updateCounts();
-    });
+    state.style.cursor = "pointer";
+    state.addEventListener("click", () => changeStateColor(state));
   });
+  updateCounts();
 });
