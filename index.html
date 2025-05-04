@@ -7,23 +7,25 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Electoral College Map</h1>
+  <div class="container">
+    <h1>Electoral College Map</h1>
 
-  <div class="controls">
-    <button id="dem-btn" class="dem">Democrat</button>
-    <button id="rep-btn" class="rep">Republican</button>
-    <button id="tossup-btn" class="tossup">Tossup</button>
+    <div class="controls">
+      <button id="dem-btn">Democrat</button>
+      <button id="rep-btn">Republican</button>
+      <button id="tossup-btn">Tossup</button>
+    </div>
+
+    <div class="counter">
+      <span class="dem">Democrat: <span id="dem-count">0</span></span>
+      <span class="rep">Republican: <span id="rep-count">0</span></span>
+      <span class="tossup">Tossup: <span id="tossup-count">538</span></span>
+    </div>
+
+    <object id="map" type="image/svg+xml" data="map.svg"></object>
+
+    <p>Click a state to cycle through party gradients.</p>
   </div>
-
-  <div class="counter">
-    <span class="dem">Democrat: <span id="dem-count">0</span></span>
-    <span class="rep">Republican: <span id="rep-count">0</span></span>
-    <span class="tossup">Tossup: <span id="tossup-count">538</span></span>
-  </div>
-
-  <object id="map" type="image/svg+xml" data="map.svg"></object>
-
-  <div class="instructions">Click a state to cycle through party gradients.</div>
 
   <script src="script.js"></script>
 </body>
