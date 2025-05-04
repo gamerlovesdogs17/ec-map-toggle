@@ -10,16 +10,16 @@
   <h1>Electoral College Map</h1>
 
   <div class="button-group">
-    <button id="democratBtn" class="party-btn" onclick="setParty('democrat')">Democrat</button>
-    <button id="republicanBtn" class="party-btn" onclick="setParty('republican')">Republican</button>
-    <button id="tossupBtn" class="party-btn selected" onclick="setParty('tossup')">Tossup</button>
+    <button id="democrat-btn" class="party-button" onclick="setParty('democrat')">Democrat</button>
+    <button id="republican-btn" class="party-button" onclick="setParty('republican')">Republican</button>
+    <button id="tossup-btn" class="party-button selected" onclick="setParty('tossup')">Tossup</button>
   </div>
 
   <div class="bar-container">
-    <div id="dem-bar" class="bar dem-bar"><span id="dem-count">0</span></div>
-    <div id="tossup-bar" class="bar tossup-bar"><span id="tossup-count">538</span></div>
-    <div id="rep-bar" class="bar rep-bar"><span id="rep-count">0</span></div>
-    <div class="marker"></div>
+    <div id="dem-bar" class="bar-segment democrat"><span id="dem-count">0</span></div>
+    <div id="tossup-bar" class="bar-segment tossup"><span id="tossup-count">538</span></div>
+    <div id="rep-bar" class="bar-segment republican"><span id="rep-count">0</span></div>
+    <div class="marker">270</div>
   </div>
 
   <div id="map-container">
