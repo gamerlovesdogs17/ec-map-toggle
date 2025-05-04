@@ -1,7 +1,8 @@
-let currentParty = null;
+let selectedParty = "Tossup";
+
 const partyColors = {
-  Democrat: ["#223E64", "#2D4E7C", "#3C5F91", "#647B9F"],
-  Republican: ["#6D1D1D", "#8C2D2D", "#A54B4B", "#BC7E7E"],
+  Democrat: ["#0b2b4c", "#1d4372", "#3b73b9"], // Safe, Likely, Lean
+  Republican: ["#6b1f1b", "#a9443f", "#cc6c5a"], // Safe, Likely, Lean
   Tossup: ["#C4C4C4"]
 };
 
@@ -15,11 +16,9 @@ const stateData = {};
 
 document.querySelectorAll(".toggle-button").forEach(button => {
   button.addEventListener("click", () => {
-    currentParty = button.dataset.party;
-    document.querySelectorAll(".toggle-button").forEach(btn => {
-      btn.classList.remove("selected");
-    });
+    document.querySelectorAll(".toggle-button").forEach(btn => btn.classList.remove("selected"));
     button.classList.add("selected");
+    selectedParty = button.dataset.party;
   });
 });
 
@@ -29,44 +28,51 @@ function updateCounts() {
   document.getElementById("tossup-count").textContent = voteCounts.Tossup;
 }
 
-function changeStateColor(stateEl) {
-  if (!currentParty || !stateEl.hasAttribute("value")) return;
-  const stateId = stateEl.getAttribute("region") || stateEl.id;
-  const ev = parseInt(stateEl.getAttribute("value"), 10);
+function getNextGradientIndex(stateId, party) {
+  const current = stateData[stateId] || { party: "Tossup", level: 0 };
+  if (current.party !== party) return 0;
+  return (current.level + 1) % partyColors[party].length;
+}
 
-  if (!stateData[stateId]) {
-    stateData[stateId] = {
-      party: "Tossup",
-      index: 0
-    };
+function setStateColor(stateEl, color) {
+  if (stateEl.tagName === "path" || stateEl.tagName === "g") {
+    stateEl.setAttribute("fill", color);
   }
+}
 
-  const prevParty = stateData[stateId].party;
-  if (prevParty !== "Tossup") voteCounts[prevParty] -= ev;
-  else voteCounts.Tossup -= ev;
+function onStateClick(event) {
+  const stateEl = event.target.closest("[region]");
+  if (!stateEl) return;
 
-  if (stateData[stateId].party !== currentParty) {
-    stateData[stateId].index = 0;
-    stateData[stateId].party = currentParty;
-  } else {
-    stateData[stateId].index = (stateData[stateId].index + 1) % partyColors[currentParty].length;
-  }
+  const stateId = stateEl.getAttribute("region");
+  const value = parseInt(stateEl.getAttribute("value")) || 0;
+  const oldData = stateData[stateId] || { party: "Tossup", level: 0 };
+  const oldParty = oldData.party;
 
-  const color = partyColors[currentParty][stateData[stateId].index];
-  stateEl.style.fill = color;
+  // Subtract old vote
+  voteCounts[oldParty] -= value;
 
-  voteCounts[currentParty] += ev;
+  // Get new gradient level
+  const newLevel = getNextGradientIndex(stateId, selectedParty);
+  stateData[stateId] = { party: selectedParty, level: newLevel };
+
+  // Update color
+  const color = partyColors[selectedParty][newLevel];
+  setStateColor(stateEl, color);
+
+  // Add new vote
+  voteCounts[selectedParty] += value;
 
   updateCounts();
 }
 
-const mapObject = document.getElementById("map");
-mapObject.addEventListener("load", () => {
-  const svgDoc = mapObject.contentDocument;
-  const states = svgDoc.querySelectorAll("[value]");
+document.addEventListener("DOMContentLoaded", () => {
+  const states = document.querySelectorAll("svg [region]");
   states.forEach(state => {
-    state.style.cursor = "pointer";
-    state.addEventListener("click", () => changeStateColor(state));
+    state.addEventListener("click", onStateClick);
+    const value = parseInt(state.getAttribute("value")) || 0;
+    voteCounts.Tossup += value;
   });
+
   updateCounts();
 });
