@@ -38,16 +38,18 @@ document.getElementById("tossup-btn").onclick = () => {
 };
 
 function handleStateClick(state) {
-  const currentFill = state.getAttribute("fill");
   const ev = parseInt(state.getAttribute("value")) || 0;
-
   const previousParty = state.dataset.party || "tossup";
+
   if (previousParty !== currentParty) {
     counts[previousParty] -= ev;
     counts[currentParty] += ev;
     updateCounts();
 
-    state.setAttribute("fill", partyColors[currentParty]);
+    // Set both the attribute and inline style
+    const color = partyColors[currentParty];
+    state.setAttribute("fill", color);
+    state.style.fill = color;
     state.dataset.party = currentParty;
   }
 }
