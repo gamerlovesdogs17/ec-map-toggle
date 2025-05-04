@@ -5,12 +5,12 @@ const tossupColor = "#C4C4C4";
 const electoralVotes = {
   AL: 9, AK: 3, AZ: 11, AR: 6, CA: 54, CO: 10, CT: 7, DE: 3, FL: 30,
   GA: 16, HI: 4, ID: 4, IL: 19, IN: 11, IA: 6, KS: 6, KY: 8, LA: 8,
-  ME: 2, "ME-01": 1, "ME-02": 1, MD: 10, MA: 11, MI: 15, MN: 10, MS: 6,
-  MO: 10, MT: 4, NE: 2, "NE-01": 1, "NE-02": 1, "NE-03": 1, NV: 6, NH: 4,
-  NJ: 14, NM: 5, NY: 28, NC: 16, ND: 3, OH: 17, OK: 7, OR: 8, PA: 19,
-  RI: 4, SC: 9, SD: 3, TN: 11, TX: 40, UT: 6, VT: 3, VA: 13, WA: 12,
-  WV: 4, WI: 10, WY: 3, DC: 3
-};
+  ME: 4, MD: 10, MA: 11, MI: 15, MN: 10, MS: 6,
+  MO: 10, MT: 4, NE: 5, NV: 6, NH: 4, NJ: 14, NM: 5, NY: 28,
+  NC: 16, ND: 3, OH: 17, OK: 7, OR: 8, PA: 19, RI: 4, SC: 9, SD: 3,
+  TN: 11, TX: 40, UT: 6, VT: 3, VA: 13, WA: 12, WV: 4,
+  WI: 10, WY: 3, DC: 3
+}; // Adjusted to match actual SVG state abbreviations
 
 let currentParty = "dem";
 
@@ -29,7 +29,7 @@ function updateCounters(svgDoc) {
   let dem = 0, rep = 0, toss = 0;
   const paths = svgDoc.querySelectorAll("path[region]");
   paths.forEach(path => {
-    const fill = path.getAttribute("fill") || tossupColor;
+    const fill = path.style.fill || tossupColor;
     const abbr = path.getAttribute("region")?.toUpperCase();
     const ev = electoralVotes[abbr] || 0;
 
@@ -60,23 +60,23 @@ window.addEventListener("DOMContentLoaded", () => {
       const abbr = path.getAttribute("region")?.toUpperCase();
       if (!abbr || !electoralVotes[abbr]) return;
 
-      if (!path.getAttribute("fill")) {
-        path.setAttribute("fill", tossupColor);
+      if (!path.style.fill) {
+        path.style.fill = tossupColor;
       }
 
       path.style.cursor = "pointer";
 
       path.addEventListener("click", () => {
-        const current = path.getAttribute("fill");
+        const current = path.style.fill;
 
         if (currentParty === "dem") {
           const next = demShades.includes(current) ? getNextColor(current, demShades) : demShades[0];
-          path.setAttribute("fill", next);
+          path.style.fill = next;
         } else if (currentParty === "rep") {
           const next = repShades.includes(current) ? getNextColor(current, repShades) : repShades[0];
-          path.setAttribute("fill", next);
+          path.style.fill = next;
         } else {
-          path.setAttribute("fill", tossupColor);
+          path.style.fill = tossupColor;
         }
 
         updateCounters(svgDoc);
@@ -86,3 +86,4 @@ window.addEventListener("DOMContentLoaded", () => {
     updateCounters(svgDoc);
   });
 });
+
