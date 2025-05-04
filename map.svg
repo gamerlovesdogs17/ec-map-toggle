@@ -166,10 +166,4 @@
     </g>
     <text style="visibility: visible; color: black; pointer-events: none; transition: fill 0.2s ease-in-out;" for-region="dc" y="502.62" x="898.25"><tspan style="transition: color 0.2s ease-in-out;" text-anchor="middle" font-family="Roboto" y="502.62" x="890.38">DC</tspan><tspan style="transition: color 0.2s ease-in-out;" map-type="value-text" y="517.62" x="890.38">3</tspan></text>
   </g>
-  <style>
-  path {
-    stroke: black;
-    stroke-width: 5;
-  }
-</style>
 </svg>
