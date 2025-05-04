@@ -1,31 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Electoral College Map</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <h1>Electoral College Map</h1>
 
   <div class="button-container">
-    <button id="democrat-btn" class="select-button blue selected">Democrat</button>
-    <button id="republican-btn" class="select-button red">Republican</button>
-    <button id="tossup-btn" class="select-button gray">Tossup</button>
+    <button id="democrat-btn" class="select-button selected">Democrat</button>
+    <button id="republican-btn" class="select-button">Republican</button>
+    <button id="tossup-btn" class="select-button">Tossup</button>
   </div>
 
-  <!-- Electoral bar counter -->
   <div class="bar-container">
-    <div class="bar">
-      <div id="tossup-bar" class="bar-segment tossup">0</div>
-      <div id="democrat-bar" class="bar-segment democrat">0</div>
-      <div id="republican-bar" class="bar-segment republican">0</div>
+    <div class="bar" id="vote-bar">
+      <div class="bar-segment tossup" id="tossup-bar"><span id="tossup-count">538</span></div>
+      <div class="bar-segment democrat" id="democrat-bar"><span id="dem-count">0</span></div>
+      <div class="bar-segment republican" id="republican-bar"><span id="rep-count">0</span></div>
       <div class="target-line"></div>
     </div>
   </div>
 
-  <!-- Map load -->
   <div class="map-container">
     <object id="map" type="image/svg+xml" data="map.svg"></object>
   </div>
