@@ -1,82 +1,64 @@
 body {
-  font-family: Arial, sans-serif;
-  background: #121212;
+  background-color: #0b1120;
   color: white;
+  font-family: sans-serif;
   text-align: center;
-  margin: 0;
-  padding: 0;
 }
 
-.container {
-  margin: auto;
-  max-width: 900px;
-  padding: 20px;
+h1 {
+  margin-top: 20px;
 }
 
-.controls {
-  margin-bottom: 15px;
+.button-container {
+  margin: 20px;
 }
 
-button {
-  margin: 0 5px;
+.party-button {
+  border: 2px solid white;
+  background: transparent;
+  color: white;
   padding: 10px 15px;
-  font-size: 1em;
+  margin: 0 5px;
+  font-size: 16px;
   cursor: pointer;
   border-radius: 5px;
-  border: 2px solid white;
-  color: white;
-  transition: all 0.2s ease;
-  background-color: #444;
+  transition: all 0.2s ease-in-out;
 }
 
-button.active {
-  box-shadow: 0 0 5px 2px white;
-  transform: scale(1.05);
+.party-button.dem.selected {
+  background-color: #0b2e5e;
+  box-shadow: 0 0 5px #0b2e5e;
 }
 
-#dem-btn {
-  background-color: #1B2A41;
-  border-color: #375A85;
+.party-button.rep.selected {
+  background-color: #8b0000;
+  box-shadow: 0 0 5px #8b0000;
 }
 
-#rep-btn {
-  background-color: #812B2B;
-  border-color: #B25B5B;
-}
-
-#tossup-btn {
-  background-color: #C4C4C4;
+.party-button.tossup.selected {
+  background-color: #bfbfbf;
   color: black;
-  border-color: #999;
+  box-shadow: 0 0 5px #bfbfbf;
+  border-color: black;
 }
 
-.counter {
-  display: flex;
-  justify-content: space-around;
-  margin: 10px 0;
-  font-size: 1.2em;
-}
-
-.dem { color: #375A85; }
-.rep { color: #B25B5B; }
-.tossup { color: #999; }
-
-object {
-  width: 90%;
-  max-width: 900px;
+object#map {
   display: block;
   margin: 0 auto;
-  border: 1px solid #444;
-  background: #1e1e1e;
+  width: 90%;
+  max-width: 1000px;
+  height: auto;
+  background-color: #1e1e1e;
 }
 
-.bar-container {
+/* Electoral bar styling */
+.ec-bar {
   display: flex;
   position: relative;
+  height: 50px;
   width: 90%;
   margin: 20px auto;
-  height: 50px;
-  background-color: #c0c0c0;
+  background-color: #bfbfbf;
   border-radius: 10px;
   overflow: hidden;
   font-weight: bold;
@@ -87,29 +69,35 @@ object {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
   color: white;
-  transition: width 0.3s;
+  height: 100%;
+  transition: width 0.3s ease-in-out;
+}
+
+.bar-segment span {
+  position: relative;
+  z-index: 2;
 }
 
 .bar-segment.tossup {
-  background-color: #b0b0b0;
+  background-color: #bfbfbf;
   color: black;
 }
 
-.bar-segment.democrat {
+.bar-segment.dem {
   background-color: #0b2e5e;
 }
 
-.bar-segment.republican {
+.bar-segment.rep {
   background-color: #8b0000;
 }
 
 .bar-marker {
   position: absolute;
   left: 50.18%;
+  top: 0;
+  bottom: 0;
   width: 2px;
-  height: 100%;
   background: white;
-  z-index: 10;
+  z-index: 3;
 }
