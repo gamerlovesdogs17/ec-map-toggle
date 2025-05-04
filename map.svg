@@ -164,7 +164,7 @@
       <text style="transition: color 0.2s ease-in-out;" y="82.04" x="871.53"><tspan y="82.04" x="871.53">ME</tspan></text>
       <text style="transition: color 0.2s ease-in-out;" font-family="Roboto" y="69.56" x="799.61"><tspan y="69.56" x="784.15">ME-02</tspan><tspan map-type="value-text" y="69.56" x="818.15">1</tspan></text>
     </g>
-    <text style="visibility: visible; color: black; pointer-events: none; transition: fill 0.2s ease-in-out;" for-region="dc" y="502.62" x="898.25"><tspan style="transition: color 0.2s ease-in-out;" text-anchor="middle" font-family="Roboto" y="502.62" x="890.38">DC</tspan><tspan style="transition: color 0.2s ease-in-out;" map-type="value-text" y="517.62" x="890.38">3</tspan></text>
+    <text style="visibility: visible; color: white; pointer-events: none; transition: fill 0.2s ease-in-out;" for-region="dc" y="502.62" x="898.25"><tspan style="transition: color 0.2s ease-in-out;" text-anchor="middle" font-family="Roboto" y="502.62" x="890.38">DC</tspan><tspan style="transition: color 0.2s ease-in-out;" map-type="value-text" y="517.62" x="890.38">3</tspan></text>
   </g>
   <style>
   <![CDATA[
