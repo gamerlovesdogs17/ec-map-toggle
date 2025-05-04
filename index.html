@@ -2,28 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Electoral College Map</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Electoral College Map</h1>
+  <div class="container">
+    <h1>Electoral College Map</h1>
 
-  <div class="toggle-buttons">
-    <button id="dem-btn" onclick="selectParty('dem')">Democrat</button>
-    <button id="rep-btn" onclick="selectParty('rep')">Republican</button>
-    <button id="tossup-btn" onclick="selectParty('tossup')">Tossup</button>
+    <div class="toggle-buttons">
+      <button id="dem-btn" onclick="selectParty('dem')">Democrat</button>
+      <button id="rep-btn" onclick="selectParty('rep')">Republican</button>
+      <button id="tossup-btn" onclick="selectParty('tossup')">Tossup</button>
+    </div>
+
+    <div class="counter">
+      <span class="dem">Democrat: <span id="dem-count">0</span></span>
+      <span class="rep">Republican: <span id="rep-count">0</span></span>
+      <span class="tossup">Tossup: <span id="tossup-count">538</span></span>
+    </div>
+
+    <object id="map" type="image/svg+xml" data="map.svg"></object>
+
+    <p class="instructions">Click a state to cycle through party gradients.</p>
   </div>
-
-  <div class="counter">
-    <span class="dem">Democrat: <span id="dem-count">0</span></span>
-    <span class="rep">Republican: <span id="rep-count">0</span></span>
-    <span class="tossup">Tossup: <span id="tossup-count">538</span></span>
-  </div>
-
-  <object id="map" type="image/svg+xml" data="map.svg"></object>
-
-  <p class="instructions">Click a state to cycle through party gradients.</p>
 
   <script src="script.js"></script>
 </body>
