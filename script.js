@@ -14,6 +14,53 @@ const electoralVotes = {
 
 let currentParty = "dem";
 
+// Wait for full DOM and SVG to load
+window.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("dem-btn").onclick = () => currentParty = "dem";
+  document.getElementById("rep-btn").onclick = () => currentParty = "rep";
+  document.getElementById("tossup-btn").onclick = () => currentParty = "tossup";
+
+  const mapObj = document.getElementById("map");
+  mapObj.addEventListener("load", () => {
+    const svg = mapObj.contentDocument;
+    if (!svg) {
+      console.error("SVG not accessible");
+      return;
+    }
+
+    const paths = svg.querySelectorAll("path");
+
+    paths.forEach(path => {
+      const id = path.getAttribute("id");
+      if (!id) return;
+
+      path.setAttribute("state-id", id);
+      path.setAttribute("fill", tossupColor);
+      path.style.cursor = "pointer";
+
+      path.addEventListener("click", () => {
+        const current = path.getAttribute("fill");
+
+        if (currentParty === "dem") {
+          path.setAttribute("fill", demShades.includes(current)
+            ? getNextColor(current, demShades)
+            : demShades[0]);
+        } else if (currentParty === "rep") {
+          path.setAttribute("fill", repShades.includes(current)
+            ? getNextColor(current, repShades)
+            : repShades[0]);
+        } else {
+          path.setAttribute("fill", tossupColor);
+        }
+
+        updateCounters();
+      });
+    });
+
+    updateCounters();
+  });
+});
+
 function getNextColor(current, shades) {
   const index = shades.indexOf(current);
   return shades[(index + 1) % shades.length];
@@ -21,7 +68,6 @@ function getNextColor(current, shades) {
 
 function updateCounters() {
   let dem = 0, rep = 0, toss = 0;
-
   document.querySelectorAll("path[state-id]").forEach(path => {
     const color = path.getAttribute("fill");
     const id = path.getAttribute("state-id");
@@ -36,49 +82,3 @@ function updateCounters() {
   document.getElementById("rep-count").textContent = rep;
   document.getElementById("tossup-count").textContent = toss;
 }
-
-document.getElementById("map").addEventListener("load", () => {
-  const svg = document.getElementById("map").contentDocument;
-  const states = svg.querySelectorAll("path");
-
-  states.forEach(path => {
-    const id = path.getAttribute("id");
-    if (!id) return;
-
-    path.setAttribute("state-id", id);
-    path.setAttribute("fill", tossupColor);
-    path.style.cursor = "pointer";
-
-    path.addEventListener("click", () => {
-      const current = path.getAttribute("fill");
-
-      if (currentParty === "dem") {
-        if (!demShades.includes(current)) {
-          path.setAttribute("fill", demShades[0]);
-        } else {
-          path.setAttribute("fill", getNextColor(current, demShades));
-        }
-      } else if (currentParty === "rep") {
-        if (!repShades.includes(current)) {
-          path.setAttribute("fill", repShades[0]);
-        } else {
-          path.setAttribute("fill", getNextColor(current, repShades));
-        }
-      } else {
-        path.setAttribute("fill", tossupColor);
-      }
-
-      updateCounters();
-    });
-  });
-
-  updateCounters();
-});
-
-// Party selector logic
-document.getElementById("dem-btn").onclick = () => currentParty = "dem";
-document.getElementById("rep-btn").onclick = () => currentParty = "rep";
-document.getElementById("tossup-btn").onclick = () => currentParty = "tossup";
-
-  updateCounters();
-});
