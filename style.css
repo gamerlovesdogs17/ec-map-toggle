@@ -16,66 +16,73 @@ h1 {
   margin: 20px;
 }
 
-.party-btn {
-  border: 2px solid #fff;
-  background-color: transparent;
-  color: #fff;
+.party-button {
+  border: 2px solid white;
+  background: none;
+  color: white;
   padding: 10px 20px;
-  margin: 0 5px;
-  border-radius: 6px;
-  font-size: 1em;
+  margin: 5px;
+  font-weight: bold;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.3s ease;
 }
 
-.party-btn.selected {
+.party-button.selected {
   box-shadow: 0 0 10px white;
-  font-weight: bold;
 }
 
 .bar-container {
   display: flex;
   position: relative;
-  height: 60px;
+  height: 50px;
   width: 90%;
-  margin: 0 auto 20px;
+  margin: 20px auto;
   border-radius: 10px;
   overflow: hidden;
-  background-color: #c4c4c4;
+  font-size: 18px;
   font-weight: bold;
-  font-size: 20px;
-  color: white;
 }
 
-.bar {
+.bar-segment {
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: width 0.3s;
 }
 
-.dem-bar {
-  background-color: #002868;
+.democrat {
+  background-color: #003366;
+  color: white;
   width: 0%;
 }
 
-.rep-bar {
-  background-color: #8b0000;
+.republican {
+  background-color: #8B0000;
+  color: white;
   width: 0%;
 }
 
-.tossup-bar {
-  background-color: #666;
-  width: 100%;
+.tossup {
+  background-color: #C0C0C0;
   color: black;
+  width: 100%;
 }
 
 .marker {
   position: absolute;
+  left: 50.18%;
   top: 0;
   bottom: 0;
-  left: 50.186%;
   width: 2px;
-  background-color: white;
-  z-index: 2;
+  background: white;
+}
+
+.marker::after {
+  content: "270";
+  position: absolute;
+  top: 52px;
+  left: -12px;
+  color: white;
+  font-size: 12px;
 }
