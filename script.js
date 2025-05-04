@@ -82,3 +82,4 @@ window.addEventListener("DOMContentLoaded", () => {
     updateCounters();
   });
 });
+ 
