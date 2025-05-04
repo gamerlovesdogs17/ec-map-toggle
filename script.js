@@ -1,68 +1,56 @@
-let currentParty = "democrat";
-
-const voteData = {
-  democrat: 0,
-  republican: 0,
-  tossup: 538
-};
-
-const partyColors = {
-  democrat: "#003366",
-  republican: "#8B0000",
-  tossup: "#999999"
-};
+let currentParty = 'tossup';
+const counts = { democrat: 0, republican: 0, tossup: 538 };
 
 function setParty(party) {
   currentParty = party;
-  document.querySelectorAll(".select-button").forEach(btn => btn.classList.remove("selected"));
-  document.getElementById(`${party}-btn`).classList.add("selected");
+  document.querySelectorAll('.party-btn').forEach(btn => btn.classList.remove('selected'));
+  document.getElementById(party + 'Btn').classList.add('selected');
 }
 
-document.getElementById("democrat-btn").onclick = () => setParty("democrat");
-document.getElementById("republican-btn").onclick = () => setParty("republican");
-document.getElementById("tossup-btn").onclick = () => setParty("tossup");
+function updateCounts() {
+  document.getElementById("dem-count").textContent = counts.democrat;
+  document.getElementById("rep-count").textContent = counts.republican;
+  document.getElementById("tossup-count").textContent = counts.tossup;
 
-function updateBar() {
-  const total = voteData.democrat + voteData.republican + voteData.tossup;
-  document.getElementById("dem-count").textContent = voteData.democrat;
-  document.getElementById("rep-count").textContent = voteData.republican;
-  document.getElementById("tossup-count").textContent = voteData.tossup;
+  const total = 538;
+  const demPercent = (counts.democrat / total) * 100;
+  const repPercent = (counts.republican / total) * 100;
+  const tossupPercent = (counts.tossup / total) * 100;
 
-  document.getElementById("democrat-bar").style.width = `${(voteData.democrat / total) * 100}%`;
-  document.getElementById("republican-bar").style.width = `${(voteData.republican / total) * 100}%`;
-  document.getElementById("tossup-bar").style.width = `${(voteData.tossup / total) * 100}%`;
+  document.getElementById("dem-bar").style.width = `${demPercent}%`;
+  document.getElementById("rep-bar").style.width = `${repPercent}%`;
+  document.getElementById("tossup-bar").style.width = `${tossupPercent}%`;
 }
 
-function setupMapListeners() {
-  const svg = document.getElementById("map").getSVGDocument();
-  if (!svg) {
-    console.warn("SVG not loaded yet.");
-    return;
-  }
+// Attach state click events once SVG loads
+document.getElementById("us-map").addEventListener("load", () => {
+  const svgDoc = document.getElementById("us-map").contentDocument;
+  const states = svgDoc.querySelectorAll("path");
 
-  const regions = svg.querySelectorAll("path, g");
+  states.forEach(state => {
+    state.addEventListener("click", () => {
+      const stateId = state.id;
+      const vote = parseInt(state.getAttribute("data-votes") || 0);
+      const prev = state.getAttribute("data-party") || "tossup";
 
-  regions.forEach(region => {
-    const ev = parseInt(region.getAttribute("data-votes")) || 0;
-    if (!ev) return;
+      // Subtract from previous
+      if (prev !== "none") counts[prev] -= vote;
 
-    region.style.cursor = "pointer";
-    region.setAttribute("data-party", "tossup");
+      // Add to new
+      counts[currentParty] += vote;
 
-    region.addEventListener("click", () => {
-      const current = region.getAttribute("data-party") || "tossup";
+      // Update party
+      state.setAttribute("data-party", currentParty);
 
-      if (current === currentParty) return;
+      // Color
+      let fillColor = "#666";
+      if (currentParty === "democrat") fillColor = "#002868";
+      else if (currentParty === "republican") fillColor = "#8b0000";
+      state.style.fill = fillColor;
 
-      voteData[current] -= ev;
-      voteData[currentParty] += ev;
-
-      region.setAttribute("data-party", currentParty);
-      region.setAttribute("fill", partyColors[currentParty]);
-
-      updateBar();
+      updateCounts();
     });
   });
-}
+});
 
-document.getElementById("map").addEventListener("load", setupMapListeners);
+updateCounts();
