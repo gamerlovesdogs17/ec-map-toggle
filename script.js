@@ -34,6 +34,13 @@ function getNextColorIndex(stateId, party) {
   return (state.level + 1) % partyColors[party].length;
 }
 
+function updateLabelColor(stateId, party) {
+  const label = document.getElementById(`${stateId}-label`);
+  if (label) {
+    label.style.fill = (party === 'tossup') ? 'black' : 'white';
+  }
+}
+
 function onStateClick(stateEl) {
   const id = stateEl.getAttribute('region');
   if (!id || !stateData[id]) return;
@@ -46,6 +53,9 @@ function onStateClick(stateEl) {
 
   stateEl.style.fill = fillColor;
 
+  // Update label color too
+  updateLabelColor(id, currentParty);
+
   updateCounts();
 }
 
@@ -54,9 +64,14 @@ window.addEventListener('load', () => {
   states.forEach(state => {
     const id = state.getAttribute('region');
     const value = parseInt(state.getAttribute('value')) || 0;
+
     stateData[id] = { party: 'tossup', level: 0, votes: value };
 
     state.style.fill = partyColors.tossup[0];
+
+    // Set initial label color
+    updateLabelColor(id, 'tossup');
+
     state.addEventListener('click', () => onStateClick(state));
   });
 
