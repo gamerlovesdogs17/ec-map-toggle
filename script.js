@@ -39,36 +39,27 @@ function onStateClick(stateEl) {
   if (!id || !stateData[id]) return;
 
   const value = stateData[id].votes;
-  const oldParty = stateData[id].party;
-  const oldLevel = stateData[id].level;
 
-  // Subtract old votes
   stateData[id].party = currentParty;
   stateData[id].level = getNextColorIndex(id, currentParty);
-
   const fillColor = partyColors[currentParty][stateData[id].level];
+
   stateEl.style.fill = fillColor;
 
   updateCounts();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const mapObj = document.getElementById('map');
-  mapObj.addEventListener('load', () => {
-    const svgDoc = mapObj.contentDocument;
-    const states = svgDoc.querySelectorAll('[region]');
+  const states = document.querySelectorAll('svg [region]');
+  states.forEach(state => {
+    const id = state.getAttribute('region');
+    const value = parseInt(state.getAttribute('value')) || 0;
+    stateData[id] = { party: 'tossup', level: 0, votes: value };
 
-    states.forEach(state => {
-      const id = state.getAttribute('region');
-      const value = parseInt(state.getAttribute('value')) || 0;
-      stateData[id] = { party: 'tossup', level: 0, votes: value };
-
-      state.style.fill = partyColors.tossup[0];
-      state.addEventListener('click', () => onStateClick(state));
-    });
-
-    updateCounts();
+    state.style.fill = partyColors.tossup[0];
+    state.addEventListener('click', () => onStateClick(state));
   });
 
+  updateCounts();
   selectParty('tossup');
 });
