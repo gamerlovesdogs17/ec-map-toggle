@@ -1,88 +1,78 @@
+// script.js
+
+let currentParty = null;
 const partyColors = {
-  democrat: ["#0a3069", "#1d4f91", "#517ea8"],
-  republican: ["#7b1e1e", "#a53a3a", "#c56d6d"],
-  tossup: ["#C4C4C4"]
+  Democrat: ["#223E64", "#2D4E7C", "#3C5F91", "#647B9F"],
+  Republican: ["#6D1D1D", "#8C2D2D", "#A54B4B", "#BC7E7E"],
+  Tossup: ["#C4C4C4"]
 };
 
-const electoralVotes = {
-  AL: 9, AK: 3, AZ: 11, AR: 6, CA: 54, CO: 10, CT: 7, DC: 3, DE: 3,
-  FL: 30, GA: 16, HI: 4, ID: 4, IL: 19, IN: 11, IA: 6, KS: 6, KY: 8,
-  LA: 8, MA: 11, MD: 10, ME: 0, ME_AL: 2, ME_01: 1, ME_02: 1,
-  MI: 15, MN: 10, MS: 6, MO: 10, MT: 4, NE: 0, NE_AL: 2, NE_01: 1, NE_02: 1, NE_03: 1,
-  NV: 6, NH: 4, NJ: 14, NM: 5, NY: 28, NC: 16, ND: 3, OH: 17,
-  OK: 7, OR: 8, PA: 19, RI: 4, SC: 9, SD: 3, TN: 11, TX: 40,
-  UT: 6, VT: 3, VA: 13, WA: 12, WV: 4, WI: 10, WY: 3
+const voteCounts = {
+  Democrat: 0,
+  Republican: 0,
+  Tossup: 538
 };
 
-let selectedParty = "democrat";
-let stateData = {};
+const stateData = {}; // Stores current index for each state and party
 
-function updateCounts() {
-  let counts = { democrat: 0, republican: 0, tossup: 0 };
-  for (const [state, data] of Object.entries(stateData)) {
-    const party = data.party;
-    const ev = data.votes;
-    if (counts[party] !== undefined) counts[party] += ev;
-  }
-  document.getElementById("dem-count").textContent = counts.democrat;
-  document.getElementById("rep-count").textContent = counts.republican;
-  document.getElementById("tossup-count").textContent = counts.tossup;
-}
-
-function normalizeRegion(region) {
-  return region.replace("-", "_").toUpperCase();
-}
-
-function applyParty(svgDoc, el, abbr) {
-  if (!stateData[abbr]) {
-    stateData[abbr] = { party: "tossup", index: 0, votes: electoralVotes[abbr] || 0 };
-  }
-
-  const party = stateData[abbr].party;
-  let index = stateData[abbr].index;
-
-  if (party === "tossup") {
-    stateData[abbr].party = selectedParty;
-    stateData[abbr].index = 0;
-  } else if (party === selectedParty) {
-    index = (index + 1) % partyColors[selectedParty].length;
-    stateData[abbr].index = index;
-  } else {
-    stateData[abbr].party = selectedParty;
-    stateData[abbr].index = 0;
-  }
-
-  const newColor = partyColors[stateData[abbr].party][stateData[abbr].index];
-  el.setAttribute("fill", newColor);
-  updateCounts();
-}
-
-window.addEventListener("load", () => {
-  const object = document.getElementById("map");
-  object.addEventListener("load", () => {
-    const svgDoc = object.contentDocument;
-    const regions = svgDoc.querySelectorAll("[region]");
-
-    regions.forEach(el => {
-      const regionRaw = el.getAttribute("region");
-      const abbr = normalizeRegion(regionRaw);
-      const ev = electoralVotes[abbr] || 0;
-      stateData[abbr] = { party: "tossup", index: 0, votes: ev };
-      el.setAttribute("fill", partyColors.tossup[0]);
-
-      el.style.cursor = "pointer";
-      el.addEventListener("click", () => applyParty(svgDoc, el, abbr));
-    });
-
-    updateCounts();
+// Add event listeners to party toggle buttons
+document.querySelectorAll(".toggle-button").forEach(button => {
+  button.addEventListener("click", () => {
+    currentParty = button.dataset.party;
+    document.querySelectorAll(".toggle-button").forEach(btn => btn.classList.remove("selected"));
+    button.classList.add("selected");
   });
 });
 
-// Button Handlers
-["democrat", "republican", "tossup"].forEach(party => {
-  document.getElementById(`${party.slice(0,3)}-btn`).addEventListener("click", () => {
-    selectedParty = party;
-    document.querySelectorAll(".party-btn").forEach(btn => btn.classList.remove("active"));
-    document.getElementById(`${party.slice(0,3)}-btn`).classList.add("active");
+function updateCounts() {
+  document.getElementById("dem-count").textContent = voteCounts.Democrat;
+  document.getElementById("rep-count").textContent = voteCounts.Republican;
+  document.getElementById("tossup-count").textContent = voteCounts.Tossup;
+}
+
+function changeStateColor(stateEl) {
+  if (!currentParty || !stateEl.hasAttribute("value")) return;
+  const stateId = stateEl.getAttribute("region") || stateEl.id;
+  const ev = parseInt(stateEl.getAttribute("value"), 10);
+
+  // Initialize state data if missing
+  if (!stateData[stateId]) {
+    stateData[stateId] = {
+      party: "Tossup",
+      index: 0
+    };
+  }
+
+  // Remove old count
+  const oldParty = stateData[stateId].party;
+  if (oldParty !== "Tossup") voteCounts[oldParty] -= ev;
+  else voteCounts.Tossup -= ev;
+
+  // Cycle to new index
+  if (stateData[stateId].party !== currentParty) {
+    stateData[stateId].index = 0;
+    stateData[stateId].party = currentParty;
+  } else {
+    stateData[stateId].index = (stateData[stateId].index + 1) % partyColors[currentParty].length;
+  }
+
+  // Apply new color
+  const fillColor = partyColors[currentParty][stateData[stateId].index];
+  stateEl.style.fill = fillColor;
+
+  // Add new count
+  voteCounts[currentParty] += ev;
+
+  updateCounts();
+}
+
+// Load the SVG and bind clicks
+const mapObject = document.getElementById("map");
+mapObject.addEventListener("load", function () {
+  const svgDoc = mapObject.contentDocument;
+  const states = svgDoc.querySelectorAll("[value]");
+  states.forEach(state => {
+    state.style.cursor = "pointer";
+    state.addEventListener("click", () => changeStateColor(state));
   });
 });
