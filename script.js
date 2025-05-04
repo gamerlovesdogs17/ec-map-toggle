@@ -22,33 +22,29 @@ function updateCounts() {
   document.getElementById("tossup-bar").style.width = `${tossupPercent}%`;
 }
 
-// Attach state click events once SVG loads
+// Run after SVG loads
 document.getElementById("us-map").addEventListener("load", () => {
   const svgDoc = document.getElementById("us-map").contentDocument;
   const states = svgDoc.querySelectorAll("path");
 
   states.forEach(state => {
+    const vote = parseInt(state.getAttribute("value") || "0");
+    state.setAttribute("data-party", "tossup");
+
     state.addEventListener("click", () => {
-      const stateId = state.id;
-      const vote = parseInt(state.getAttribute("data-votes") || 0);
-      const prev = state.getAttribute("data-party") || "tossup";
+      const prev = state.getAttribute("data-party");
+      if (prev !== currentParty) {
+        if (prev !== "none") counts[prev] -= vote;
+        counts[currentParty] += vote;
+        state.setAttribute("data-party", currentParty);
 
-      // Subtract from previous
-      if (prev !== "none") counts[prev] -= vote;
+        // Apply fill color
+        if (currentParty === "democrat") state.style.fill = "#002868";
+        else if (currentParty === "republican") state.style.fill = "#8b0000";
+        else state.style.fill = "#999";
 
-      // Add to new
-      counts[currentParty] += vote;
-
-      // Update party
-      state.setAttribute("data-party", currentParty);
-
-      // Color
-      let fillColor = "#666";
-      if (currentParty === "democrat") fillColor = "#002868";
-      else if (currentParty === "republican") fillColor = "#8b0000";
-      state.style.fill = fillColor;
-
-      updateCounts();
+        updateCounts();
+      }
     });
   });
 });
