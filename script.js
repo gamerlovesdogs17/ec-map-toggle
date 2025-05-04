@@ -1,8 +1,8 @@
 let currentParty = 'tossup';
 
 const partyColors = {
-  dem: ['#0c2340', '#304d80', '#5f7db8'],
-  rep: ['#8b0000', '#b22222', '#e06666'],
+  dem: ['#0f224d', '#405b96', '#627bb2'],
+  rep: ['#7c131a', '#c2424d', '#bf9673'],
   tossup: ['#c4c4c4']
 };
 
@@ -34,13 +34,6 @@ function getNextColorIndex(stateId, party) {
   return (state.level + 1) % partyColors[party].length;
 }
 
-function updateLabelColor(stateId, party) {
-  const label = document.getElementById(`${stateId}-label`);
-  if (label) {
-    label.style.fill = (party === 'tossup') ? 'black' : 'white';
-  }
-}
-
 function onStateClick(stateEl) {
   const id = stateEl.getAttribute('region');
   if (!id || !stateData[id]) return;
@@ -52,3 +45,21 @@ function onStateClick(stateEl) {
   const fillColor = partyColors[currentParty][stateData[id].level];
 
   stateEl.style.fill = fillColor;
+
+  updateCounts();
+}
+
+window.addEventListener('load', () => {
+  const states = document.querySelectorAll('svg [region]');
+  states.forEach(state => {
+    const id = state.getAttribute('region');
+    const value = parseInt(state.getAttribute('value')) || 0;
+    stateData[id] = { party: 'tossup', level: 0, votes: value };
+
+    state.style.fill = partyColors.tossup[0];
+    state.addEventListener('click', () => onStateClick(state));
+  });
+
+  updateCounts();
+  selectParty('tossup');
+});
