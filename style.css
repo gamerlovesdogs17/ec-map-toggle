@@ -1,70 +1,56 @@
 body {
-  font-family: Arial, sans-serif;
-  background: #121212;
+  background: #1c1c1c;
   color: white;
   text-align: center;
-  margin: 0;
-  padding: 0;
-}
- 
-.container {
-  margin: auto;
-  max-width: 900px;
-  padding: 20px;
+  font-family: Arial, sans-serif;
 }
 
-.controls {
-  margin-bottom: 15px;
+.toggle-container {
+  margin: 20px;
 }
 
-button {
-  margin: 0 5px;
-  padding: 10px 15px;
-  font-size: 1em;
-  cursor: pointer;
-  border-radius: 5px;
-  border: 2px solid white;
+.toggle-button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  font-weight: bold;
   color: white;
-  transition: all 0.2s ease;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-button.active {
-  box-shadow: 0 0 5px 2px white;
-  transform: scale(1.05);
-}
-
-#dem-btn {
-  background-color: #1B2A41;
-  border-color: #375A85;
-}
-
-#rep-btn {
-  background-color: #812B2B;
-  border-color: #B25B5B;
-}
-
-#tossup-btn {
-  background-color: #C4C4C4;
-  color: black;
-  border-color: #999;
+.toggle-button.selected {
+  box-shadow: 0 0 10px white;
 }
 
 .counter {
-  display: flex;
-  justify-content: space-around;
-  margin: 10px 0;
-  font-size: 1.2em;
+  margin-bottom: 10px;
+  font-size: 18px;
 }
 
-.dem { color: #375A85; }
-.rep { color: #B25B5B; }
-.tossup { color: #999; }
+.dem {
+  color: #3C5F91;
+  margin-right: 20px;
+}
+
+.rep {
+  color: #A54B4B;
+  margin-right: 20px;
+}
+
+.tossup {
+  color: #C4C4C4;
+}
 
 object {
   width: 90%;
-  max-width: 900px;
+  height: 600px;
+  border: none;
+  margin: auto;
   display: block;
-  margin: 0 auto;
-  border: 1px solid #444;
-  background: #1e1e1e;
+}
+
+.instructions {
+  font-size: 14px;
+  color: gray;
+  margin-top: 20px;
 }
