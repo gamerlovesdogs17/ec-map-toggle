@@ -80,4 +80,5 @@ button.selected {
 
 svg [region] {
   cursor: pointer;
+  fill: inherit !important;
 }
