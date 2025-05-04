@@ -70,48 +70,46 @@ object {
   background: #1e1e1e;
 }
 
-.counter-bar {
+.bar-container {
   display: flex;
   position: relative;
-  height: 60px;
   width: 90%;
-  max-width: 1000px;
-  margin: 30px auto;
+  margin: 20px auto;
+  height: 50px;
+  background-color: #c0c0c0;
   border-radius: 10px;
   overflow: hidden;
-  background-color: #ccc;
-}
-
-.segment {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   font-weight: bold;
-  font-size: 1.5rem;
-  color: white;
-  height: 100%;
-  transition: width 0.3s ease;
+  font-size: 20px;
 }
 
-.tossup-segment {
-  background-color: #ccc;
+.bar-segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: white;
+  transition: width 0.3s;
+}
+
+.bar-segment.tossup {
+  background-color: #b0b0b0;
   color: black;
 }
 
-.dem-segment {
-  background-color: #003366;
+.bar-segment.democrat {
+  background-color: #0b2e5e;
 }
 
-.rep-segment {
+.bar-segment.republican {
   background-color: #8b0000;
 }
 
-.marker-270 {
+.bar-marker {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50.18%; /* 270 / 538 ≈ 50.18% */
+  left: 50.18%;
   width: 2px;
-  background-color: black;
+  height: 100%;
+  background: white;
   z-index: 10;
 }
