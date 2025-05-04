@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Electoral College Map</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Electoral College Map</h1>
+  <div class="container">
+    <h1>Electoral College Map</h1>
 
-  <div class="toggle-group">
-    <button class="toggle-button" data-party="Democrat">Democrat</button>
-    <button class="toggle-button" data-party="Republican">Republican</button>
-    <button class="toggle-button" data-party="Tossup">Tossup</button>
-  </div>
+    <div class="controls">
+      <button id="dem-btn" class="toggle-button" data-party="Democrat">Democrat</button>
+      <button id="rep-btn" class="toggle-button" data-party="Republican">Republican</button>
+      <button id="tossup-btn" class="toggle-button" data-party="Tossup">Tossup</button>
+    </div>
 
-  <div class="counter">
-    <span class="dem">Democrat: <span id="dem-count">0</span></span>
-    <span class="rep">Republican: <span id="rep-count">0</span></span>
-    <span class="tossup">Tossup: <span id="tossup-count">538</span></span>
-  </div>
+    <div class="counter">
+      <span class="dem">Democrat: <span id="dem-count">0</span></span>
+      <span class="rep">Republican: <span id="rep-count">0</span></span>
+      <span class="tossup">Tossup: <span id="tossup-count">538</span></span>
+    </div>
 
-  <div id="map-container">
-    <svg style="--auto-border-stroke-width: 1.2px; --region-stroke-color: #000000; transform-origin: 0px 0px 0px; transform: matrix(0.640398, 0, 0, 0.640398, 204.302, 65.9524);" tossup-candidate="{&quot;id&quot;:&quot;&quot;,&quot;name&quot;:&quot;Tossup&quot;,&quot;defaultCount&quot;:0,&quot;margins&quot;:[{&quot;color&quot;:&quot;#c4c4c4&quot;}]}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 959 593" version="1.1" candidates="[{&quot;id&quot;:&quot;0&quot;,&quot;name&quot;:&quot;Democrat&quot;,&quot;defaultCount&quot;:0,&quot;margins&quot;:[{&quot;color&quot;:&quot;#0f224d&quot;},{&quot;color&quot;:&quot;#405b96&quot;},{&quot;color&quot;:&quot;#627bb2&quot;},{&quot;color&quot;:&quot;#74798b&quot;}]},{&quot;id&quot;:&quot;1&quot;,&quot;name&quot;:&quot;Republican&quot;,&quot;defaultCount&quot;:0,&quot;margins&quot;:[{&quot;color&quot;:&quot;#7c131a&quot;},{&quot;color&quot;:&quot;#c2424d&quot;},{&quot;color&quot;:&quot;#bf6973&quot;},{&quot;color&quot;:&quot;#97655e&quot;}]}]" auto-border-stroke-width-limit="1" auto-border-stroke-width="2" title="USA 2028 Presidential" type="presidential">
+    <div id="map-container">
+      <svg style="--auto-border-stroke-width: 1.2px; --region-stroke-color: #000000; transform-origin: 0px 0px 0px; transform: matrix(0.640398, 0, 0, 0.640398, 204.302, 65.9524);" tossup-candidate="{&quot;id&quot;:&quot;&quot;,&quot;name&quot;:&quot;Tossup&quot;,&quot;defaultCount&quot;:0,&quot;margins&quot;:[{&quot;color&quot;:&quot;#c4c4c4&quot;}]}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 959 593" version="1.1" candidates="[{&quot;id&quot;:&quot;0&quot;,&quot;name&quot;:&quot;Democrat&quot;,&quot;defaultCount&quot;:0,&quot;margins&quot;:[{&quot;color&quot;:&quot;#0f224d&quot;},{&quot;color&quot;:&quot;#405b96&quot;},{&quot;color&quot;:&quot;#627bb2&quot;},{&quot;color&quot;:&quot;#74798b&quot;}]},{&quot;id&quot;:&quot;1&quot;,&quot;name&quot;:&quot;Republican&quot;,&quot;defaultCount&quot;:0,&quot;margins&quot;:[{&quot;color&quot;:&quot;#7c131a&quot;},{&quot;color&quot;:&quot;#c2424d&quot;},{&quot;color&quot;:&quot;#bf6973&quot;},{&quot;color&quot;:&quot;#97655e&quot;}]}]" auto-border-stroke-width-limit="1" auto-border-stroke-width="2" title="USA 2028 Presidential" type="presidential">
   <g map-type="regions">
     <path style="fill: rgb(196, 196, 196); visibility: visible; fill-opacity: 1; cursor: pointer; transition: fill 0.2s ease-in-out;" candidates="[{&quot;candidate&quot;:&quot;&quot;,&quot;count&quot;:2,&quot;margin&quot;:0}]" value="2" short-name="ne-al" region="ne-al" long-name="Nebraska at Large" map-type="button" d="M684 19.5a4.47 4.47 0 0 0-4.5 4.46v81.08a4.47 4.47 0 0 0 4.5 4.46h72c2.49 0 4.5-1.98 4.5-4.46V23.96a4.47 4.47 0 0 0-4.5-4.46Zm4 22h64c1.94 0 3.5 1.63 3.5 3.5v56c0 1.87-1.56 3.5-3.5 3.5h-64a3.53 3.53 0 0 1-3.5-3.5V45c0-1.87 1.56-3.5 3.5-3.5z"></path>
     <path style="fill: rgb(196, 196, 196); visibility: visible; fill-opacity: 1; cursor: pointer; transition: fill 0.2s ease-in-out;" candidates="[{&quot;candidate&quot;:&quot;&quot;,&quot;count&quot;:9,&quot;margin&quot;:0}]" value="9" short-name="al" region="al" long-name="Alabama" d="m666.67 361-45.83 4 .3.65c.32.68.89 1.09.96 1.61l-1.3 66.85 4.43 33.54.7-.6c.39-.33.89 0 1.72-.04l-.4-.17c.68.75 1.95.73 2.16-.44l-.04.13c.5-1.02 1.14-2.05 1.6-3.13l.02-.07v-.09c.06-.77-.05-1.53.06-2.15l.96-.96c.52.18 1.05.28 1.36.54l3.34 6.27c0 .3.02.62 0 .79 0 .05 0 .04-.03.05l-.06.02-3.38 2.25 1.88-.13a11.7 11.7 0 0 0 3.57-.77c1.34-.5 2.87-.77 4.18-1.56l.22-.14.41-7.37-.1-.14c-.39-.54-.86-1.35-1.82-1.5h.05c-.54-.13-1-.46-1.32-.92l-.01-.03-1.9-2.11.48-2.79 48.9-5.1-.24-.6c-.27-.7-.36-1.84-1.3-2.45l.08.06c-.55-.53-.98-.9-1.08-1.5v-.08l-.04-.07c-.4-.78.01-1.73.01-2.87v.04c.1-1.32.32-2.7.34-4.03v-.1l-2.36-5.61c.38-1.71.64-3.43.72-5.2v-.02c0-.68.12-1.26.5-1.73l.01-.03 1.74-3.01v-.11c.11-1.11-.76-1.54-1.36-1.83h-.02l-.03-.02c-.43-.16-.57-.33-.47-.71l.01-.07v-.07c-.04-.79.1-1.74-.07-2.58l-.03-.13-.08-.1c-.8-.92-1.71-1.56-2.04-2.56v-.02l-.01-.03c-.85-1.86-1.82-3.65-2.56-5.51z"></path>
@@ -199,9 +200,11 @@
   ]]>
 </style>
 </svg>
+    </div>
+
+    <p style="text-align: center;">Click a state to cycle through party gradients.</p>
   </div>
 
-  <p style="text-align: center;">Click a state to cycle through party gradients.</p>
   <script src="script.js"></script>
 </body>
 </html>
