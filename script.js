@@ -1,9 +1,8 @@
-let selectedParty = 'tossup';
-
+let currentParty = "tossup";
 const partyColors = {
-  democrat: '#003366',
-  republican: '#8B0000',
-  tossup: '#C0C0C0'
+  democrat: "#375A85",
+  republican: "#B25B5B",
+  tossup: "#C4C4C4"
 };
 
 const counts = {
@@ -12,63 +11,75 @@ const counts = {
   tossup: 538
 };
 
-function setParty(party) {
-  selectedParty = party;
-  document.querySelectorAll('.party-button').forEach(button => {
-    button.classList.remove('selected');
-  });
-  document.getElementById(`${party}-button`).classList.add('selected');
-}
-
-function updateCounts() {
-  document.getElementById("dem-count").textContent = counts.democrat;
-  document.getElementById("rep-count").textContent = counts.republican;
-  document.getElementById("tossup-count").textContent = counts.tossup;
-
+function updateCounterBar() {
   const total = 538;
-  const demPct = (counts.democrat / total) * 100;
-  const repPct = (counts.republican / total) * 100;
+  const dem = parseInt(document.getElementById("dem-count").textContent);
+  const rep = parseInt(document.getElementById("rep-count").textContent);
+  const tossup = total - dem - rep;
+
+  const demBar = document.getElementById("dem-bar");
+  const repBar = document.getElementById("rep-bar");
+  const tossupBar = document.getElementById("tossup-bar");
+
+  const demPct = (dem / total) * 100;
+  const repPct = (rep / total) * 100;
   const tossupPct = 100 - demPct - repPct;
 
-  document.getElementById("dem-bar").style.width = `${demPct}%`;
-  document.getElementById("rep-bar").style.width = `${repPct}%`;
-  document.getElementById("tossup-bar").style.width = `${tossupPct}%`;
+  demBar.style.width = `${demPct}%`;
+  repBar.style.width = `${repPct}%`;
+  tossupBar.style.width = `${tossupPct}%`;
+
+  document.getElementById("dem-count").textContent = dem;
+  document.getElementById("rep-count").textContent = rep;
+  document.getElementById("tossup-count").textContent = tossup;
 }
 
-function initializeMap() {
-  const svgObject = document.getElementById("map");
-  svgObject.addEventListener("load", () => {
-    const svgDoc = svgObject.contentDocument;
-    const states = svgDoc.querySelectorAll("[value]");
 
-    states.forEach(state => {
-      state.addEventListener("click", () => {
-        const value = parseInt(state.getAttribute("value"));
-        const current = state.getAttribute("data-party") || "tossup";
-
-        // Subtract from previous party
-        counts[current] -= value;
-
-        // Update to new party
-        state.setAttribute("fill", partyColors[selectedParty]);
-        state.setAttribute("data-party", selectedParty);
-        counts[selectedParty] += value;
-
-        updateCounts();
-      });
-
-      // Initialize party color on page load
-      const initialParty = state.getAttribute("data-party") || "tossup";
-      const initialValue = parseInt(state.getAttribute("value"));
-      state.setAttribute("fill", partyColors[initialParty]);
-      counts[initialParty] += initialValue;
-    });
-
-    updateCounts();
+function setButtonActive(id) {
+  ["dem-btn", "rep-btn", "tossup-btn"].forEach(btn => {
+    document.getElementById(btn).classList.remove("active");
   });
+  document.getElementById(id).classList.add("active");
 }
 
-window.onload = () => {
-  initializeMap();
-  updateCounts();
+document.getElementById("dem-btn").onclick = () => {
+  currentParty = "democrat";
+  setButtonActive("dem-btn");
 };
+document.getElementById("rep-btn").onclick = () => {
+  currentParty = "republican";
+  setButtonActive("rep-btn");
+};
+document.getElementById("tossup-btn").onclick = () => {
+  currentParty = "tossup";
+  setButtonActive("tossup-btn");
+};
+
+function handleStateClick(state) {
+  const ev = parseInt(state.getAttribute("value")) || 0;
+  const previousParty = state.dataset.party || "tossup";
+
+  if (previousParty !== currentParty) {
+    counts[previousParty] -= ev;
+    counts[currentParty] += ev;
+    updateCounts();
+
+    // Set both the attribute and inline style
+    const color = partyColors[currentParty];
+    state.setAttribute("fill", color);
+    state.style.fill = color;
+    state.dataset.party = currentParty;
+  }
+}
+
+document.getElementById("map").addEventListener("load", function () {
+  const svgDoc = this.contentDocument;
+  const states = svgDoc.querySelectorAll("[region]");
+
+  states.forEach(state => {
+    state.setAttribute("fill", partyColors.tossup);
+    state.dataset.party = "tossup";
+
+    state.addEventListener("click", () => handleStateClick(state));
+  });
+});
