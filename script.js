@@ -52,29 +52,3 @@ function onStateClick(stateEl) {
   const fillColor = partyColors[currentParty][stateData[id].level];
 
   stateEl.style.fill = fillColor;
-
-  // Update label color too
-  updateLabelColor(id, currentParty);
-
-  updateCounts();
-}
-
-window.addEventListener('load', () => {
-  const states = document.querySelectorAll('svg [region]');
-  states.forEach(state => {
-    const id = state.getAttribute('region');
-    const value = parseInt(state.getAttribute('value')) || 0;
-
-    stateData[id] = { party: 'tossup', level: 0, votes: value };
-
-    state.style.fill = partyColors.tossup[0];
-
-    // Set initial label color
-    updateLabelColor(id, 'tossup');
-
-    state.addEventListener('click', () => onStateClick(state));
-  });
-
-  updateCounts();
-  selectParty('tossup');
-});
