@@ -21,18 +21,24 @@ function setParty(party) {
 }
 
 function updateCounts() {
-  document.getElementById("dem-count").textContent = counts.democrat;
-  document.getElementById("rep-count").textContent = counts.republican;
-  document.getElementById("tossup-count").textContent = counts.tossup;
-
   const total = 538;
-  const demPct = (counts.democrat / total) * 100;
-  const repPct = (counts.republican / total) * 100;
-  const tossupPct = 100 - demPct - repPct;
+  const dem = counts.democrat;
+  const rep = counts.republican;
+  const toss = total - dem - rep;
+
+  counts.tossup = toss;
+
+  document.getElementById("dem-count").textContent = dem;
+  document.getElementById("rep-count").textContent = rep;
+  document.getElementById("tossup-count").textContent = toss;
+
+  const demPct = (dem / total) * 100;
+  const repPct = (rep / total) * 100;
+  const tossPct = 100 - demPct - repPct;
 
   document.getElementById("dem-bar").style.width = `${demPct}%`;
   document.getElementById("rep-bar").style.width = `${repPct}%`;
-  document.getElementById("tossup-bar").style.width = `${tossupPct}%`;
+  document.getElementById("tossup-bar").style.width = `${tossPct}%`;
 }
 
 function initializeMap() {
