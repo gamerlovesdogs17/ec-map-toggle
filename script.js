@@ -11,28 +11,22 @@ const counts = {
   tossup: 538
 };
 
-function updateCounterBar() {
+function updateCounts() {
+  document.getElementById("dem-count").textContent = counts.democrat;
+  document.getElementById("rep-count").textContent = counts.republican;
+  document.getElementById("tossup-count").textContent = counts.tossup;
+
+  // Update bar widths
   const total = 538;
-  const dem = parseInt(document.getElementById("dem-count").textContent);
-  const rep = parseInt(document.getElementById("rep-count").textContent);
-  const tossup = total - dem - rep;
-
-  const demBar = document.getElementById("dem-bar");
-  const repBar = document.getElementById("rep-bar");
-  const tossupBar = document.getElementById("tossup-bar");
-
-  const demPct = (dem / total) * 100;
-  const repPct = (rep / total) * 100;
+  const demPct = (counts.democrat / total) * 100;
+  const repPct = (counts.republican / total) * 100;
   const tossupPct = 100 - demPct - repPct;
 
-  demBar.style.width = `${demPct}%`;
-  repBar.style.width = `${repPct}%`;
-  tossupBar.style.width = `${tossupPct}%`;
-
-  document.getElementById("dem-count").textContent = dem;
-  document.getElementById("rep-count").textContent = rep;
-  document.getElementById("tossup-count").textContent = tossup;
+  document.getElementById("dem-bar").style.width = `${demPct}%`;
+  document.getElementById("rep-bar").style.width = `${repPct}%`;
+  document.getElementById("tossup-bar").style.width = `${tossupPct}%`;
 }
+
 
 
 function setButtonActive(id) {
