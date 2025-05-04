@@ -12,15 +12,15 @@ const partyColors = {
   tossup: "#999999"
 };
 
-document.getElementById("democrat-btn").onclick = () => setParty("democrat");
-document.getElementById("republican-btn").onclick = () => setParty("republican");
-document.getElementById("tossup-btn").onclick = () => setParty("tossup");
-
 function setParty(party) {
   currentParty = party;
   document.querySelectorAll(".select-button").forEach(btn => btn.classList.remove("selected"));
   document.getElementById(`${party}-btn`).classList.add("selected");
 }
+
+document.getElementById("democrat-btn").onclick = () => setParty("democrat");
+document.getElementById("republican-btn").onclick = () => setParty("republican");
+document.getElementById("tossup-btn").onclick = () => setParty("tossup");
 
 function updateBar() {
   const total = voteData.democrat + voteData.republican + voteData.tossup;
@@ -34,24 +34,31 @@ function updateBar() {
 }
 
 function setupMapListeners() {
-  const svgDoc = document.getElementById("map").getSVGDocument();
-  if (!svgDoc) return;
+  const svg = document.getElementById("map").getSVGDocument();
+  if (!svg) {
+    console.warn("SVG not loaded yet.");
+    return;
+  }
 
-  const paths = svgDoc.querySelectorAll("path[id], g[id]");
+  const regions = svg.querySelectorAll("path, g");
 
-  paths.forEach(state => {
-    state.style.cursor = "pointer";
-    state.addEventListener("click", () => {
-      const ev = parseInt(state.getAttribute("data-votes")) || 0;
-      const current = state.getAttribute("data-party") || "tossup";
+  regions.forEach(region => {
+    const ev = parseInt(region.getAttribute("data-votes")) || 0;
+    if (!ev) return;
+
+    region.style.cursor = "pointer";
+    region.setAttribute("data-party", "tossup");
+
+    region.addEventListener("click", () => {
+      const current = region.getAttribute("data-party") || "tossup";
 
       if (current === currentParty) return;
 
       voteData[current] -= ev;
       voteData[currentParty] += ev;
 
-      state.setAttribute("data-party", currentParty);
-      state.setAttribute("fill", partyColors[currentParty]);
+      region.setAttribute("data-party", currentParty);
+      region.setAttribute("fill", partyColors[currentParty]);
 
       updateBar();
     });
