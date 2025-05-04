@@ -170,6 +170,6 @@
 <style>
   path {
     stroke: black;
-    stroke-width: 1;
+    stroke-width: 5;
   }
 </style>
