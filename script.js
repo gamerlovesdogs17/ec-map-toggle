@@ -10,21 +10,17 @@ const stateData = {};
 
 function selectParty(party) {
   currentParty = party;
-
-  document.getElementById('dem-btn').classList.remove('selected');
-  document.getElementById('rep-btn').classList.remove('selected');
-  document.getElementById('tossup-btn').classList.remove('selected');
-
+  ['dem', 'rep', 'tossup'].forEach(p => {
+    document.getElementById(`${p}-btn`).classList.remove('selected');
+  });
   document.getElementById(`${party}-btn`).classList.add('selected');
 }
 
 function updateCounts() {
   let counts = { dem: 0, rep: 0, tossup: 0 };
-
-  for (const state in stateData) {
-    const info = stateData[state];
-    const votes = parseInt(info.votes, 10);
-    counts[info.party] += votes;
+  for (const id in stateData) {
+    const { party, votes } = stateData[id];
+    counts[party] += votes;
   }
 
   document.getElementById('dem-count').textContent = counts.dem;
@@ -32,27 +28,27 @@ function updateCounts() {
   document.getElementById('tossup-count').textContent = counts.tossup;
 }
 
-function cycleStateColor(stateEl) {
-  const id = stateEl.getAttribute('id') || stateEl.getAttribute('short-name');
-  if (!id) return;
+function getNextColorIndex(stateId, party) {
+  const state = stateData[stateId];
+  if (!state || state.party !== party) return 0;
+  return (state.level + 1) % partyColors[party].length;
+}
 
-  const value = parseInt(stateEl.getAttribute('value'), 10) || 0;
+function onStateClick(stateEl) {
+  const id = stateEl.getAttribute('region');
+  if (!id || !stateData[id]) return;
 
-  if (!stateData[id]) {
-    stateData[id] = { party: currentParty, level: 0, votes: value };
-  } else {
-    const data = stateData[id];
-    if (data.party === currentParty) {
-      data.level = (data.level + 1) % partyColors[currentParty].length;
-    } else {
-      data.party = currentParty;
-      data.level = 0;
-    }
-  }
+  const value = stateData[id].votes;
+  const oldParty = stateData[id].party;
+  const oldLevel = stateData[id].level;
 
-  const data = stateData[id];
-  const fillColor = partyColors[data.party][data.level] || partyColors[data.party][0];
-  stateEl.setAttribute('fill', fillColor);
+  // Subtract old votes
+  stateData[id].party = currentParty;
+  stateData[id].level = getNextColorIndex(id, currentParty);
+
+  const fillColor = partyColors[currentParty][stateData[id].level];
+  stateEl.style.fill = fillColor;
+
   updateCounts();
 }
 
@@ -63,13 +59,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const states = svgDoc.querySelectorAll('[region]');
 
     states.forEach(state => {
-      state.addEventListener('click', () => cycleStateColor(state));
       const id = state.getAttribute('region');
-      const votes = parseInt(state.getAttribute('value'), 10) || 0;
-      stateData[id] = { party: 'tossup', level: 0, votes };
-      state.setAttribute('fill', partyColors.tossup[0]);
+      const value = parseInt(state.getAttribute('value')) || 0;
+      stateData[id] = { party: 'tossup', level: 0, votes: value };
+
+      state.style.fill = partyColors.tossup[0];
+      state.addEventListener('click', () => onStateClick(state));
     });
 
     updateCounts();
   });
+
+  selectParty('tossup');
 });
