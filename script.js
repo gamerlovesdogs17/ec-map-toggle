@@ -49,7 +49,7 @@ function onStateClick(stateEl) {
   updateCounts();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('load', () => {
   const states = document.querySelectorAll('svg [region]');
   states.forEach(state => {
     const id = state.getAttribute('region');
