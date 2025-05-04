@@ -25,15 +25,16 @@ function getNextColor(current, shades) {
   return shades[(index + 1) % shades.length];
 }
 
-function updateCounters() {
+function updateCounters(svgDoc) {
   let dem = 0, rep = 0, toss = 0;
-  document.querySelectorAll("path[state-abbr]").forEach(path => {
-    const color = path.getAttribute("fill");
-    const abbr = path.getAttribute("state-abbr");
-    const ev = electoralVotes[abbr.toUpperCase()] || 0;
+  const paths = svgDoc.querySelectorAll("path[region]");
+  paths.forEach(path => {
+    const fill = path.getAttribute("fill") || tossupColor;
+    const abbr = path.getAttribute("region")?.toUpperCase();
+    const ev = electoralVotes[abbr] || 0;
 
-    if (demShades.includes(color)) dem += ev;
-    else if (repShades.includes(color)) rep += ev;
+    if (demShades.includes(fill)) dem += ev;
+    else if (repShades.includes(fill)) rep += ev;
     else toss += ev;
   });
 
@@ -50,16 +51,20 @@ window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("tossup-btn").onclick = () => setActiveButton("tossup");
 
   const mapObj = document.getElementById("map");
+
   mapObj.addEventListener("load", () => {
-    const svg = mapObj.contentDocument;
-    const paths = svg.querySelectorAll("path[region], path[short-name]");
+    const svgDoc = mapObj.contentDocument;
+    const paths = svgDoc.querySelectorAll("path[region]");
 
     paths.forEach(path => {
-      const abbr = path.getAttribute("short-name")?.toUpperCase() || path.getAttribute("region")?.toUpperCase();
+      const abbr = path.getAttribute("region")?.toUpperCase();
       if (!abbr || !electoralVotes[abbr]) return;
 
-      path.setAttribute("state-abbr", abbr);
-      path.setAttribute("fill", tossupColor);
+      // Initialize color if needed
+      if (!path.getAttribute("fill")) {
+        path.setAttribute("fill", tossupColor);
+      }
+
       path.style.cursor = "pointer";
 
       path.addEventListener("click", () => {
@@ -75,11 +80,10 @@ window.addEventListener("DOMContentLoaded", () => {
           path.setAttribute("fill", tossupColor);
         }
 
-        updateCounters();
+        updateCounters(svgDoc);
       });
     });
 
-    updateCounters();
+    updateCounters(svgDoc);
   });
 });
- 
