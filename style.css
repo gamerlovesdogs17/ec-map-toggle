@@ -29,8 +29,9 @@ button {
 }
 
 button.active {
-  box-shadow: 0 0 5px 2px white;
+  outline: 3px solid white;
   transform: scale(1.05);
+  filter: brightness(1.2);
 }
 
 #dem-btn {
@@ -51,9 +52,11 @@ button.active {
 
 .counter {
   display: flex;
-  justify-content: space-around;
-  margin: 10px 0;
-  font-size: 1.2em;
+  justify-content: space-evenly;
+  align-items: center;
+  margin: 15px 0;
+  font-size: 1.3em;
+  font-weight: 600;
 }
 
 .dem { color: #375A85; }
@@ -67,4 +70,20 @@ object {
   margin: 0 auto;
   border: 1px solid #444;
   background: #1e1e1e;
+}
+
+svg [region] {
+  cursor: pointer;
+}
+
+.dem-1 { fill: #27496d; }
+.dem-2 { fill: #1b2a41; }
+.dem-3 { fill: #0f1a2f; }
+
+.rep-1 { fill: #993333; }
+.rep-2 { fill: #812b2b; }
+.rep-3 { fill: #5a1a1a; }
+
+.tossup-1, .tossup-2, .tossup-3 {
+  fill: #C4C4C4;
 }
