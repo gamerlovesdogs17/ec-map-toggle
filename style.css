@@ -1,93 +1,80 @@
 body {
-  background-color: #0d1117;
+  background-color: #11141a;
   color: white;
-  font-family: Arial, sans-serif;
+  font-family: sans-serif;
   text-align: center;
   margin: 0;
-  padding: 20px;
+  padding: 0;
 }
 
 h1 {
-  font-size: 2.5em;
-  margin-bottom: 10px;
+  margin-top: 20px;
+  font-size: 2em;
 }
 
-.button-container {
-  margin: 20px 0;
+.button-group {
+  margin: 20px;
 }
 
-.select-button {
+.party-btn {
+  border: 2px solid #fff;
+  background-color: transparent;
+  color: #fff;
   padding: 10px 20px;
   margin: 0 5px;
-  font-size: 16px;
-  border: 2px solid white;
   border-radius: 6px;
-  background-color: transparent;
-  color: white;
+  font-size: 1em;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.select-button.selected {
+.party-btn.selected {
   box-shadow: 0 0 10px white;
-}
-
-.bar-container {
-  width: 90%;
-  margin: 20px auto;
-  height: 60px;
-  position: relative;
-}
-
-.bar {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-  overflow: hidden;
-  background-color: #ccc;
-  position: relative;
-}
-
-.bar-segment {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-size: 24px;
   font-weight: bold;
 }
 
-.democrat {
-  background-color: #003366;
+.bar-container {
+  display: flex;
+  position: relative;
+  height: 60px;
+  width: 90%;
+  margin: 0 auto 20px;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #c4c4c4;
 }
 
-.republican {
-  background-color: #8B0000;
+.bar {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+  color: white;
 }
 
-.tossup {
-  background-color: #999;
+.dem-bar {
+  background-color: #002868;
+  width: 0%;
+}
+
+.rep-bar {
+  background-color: #8b0000;
+  width: 0%;
+}
+
+.tossup-bar {
+  background-color: #666;
+  width: 100%;
   color: black;
 }
 
-.target-line {
+.marker {
   position: absolute;
-  left: 50.18%;
   top: 0;
   bottom: 0;
   width: 2px;
   background-color: white;
-}
-
-.map-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-#map {
-  width: 90%;
-  height: auto;
-  border: 1px solid #555;
+  z-index: 2;
 }
