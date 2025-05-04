@@ -19,8 +19,13 @@ const stateData = {}; // Stores current index for each state and party
 document.querySelectorAll(".toggle-button").forEach(button => {
   button.addEventListener("click", () => {
     currentParty = button.dataset.party;
-    document.querySelectorAll(".toggle-button").forEach(btn => btn.classList.remove("selected"));
-    button.classList.add("selected");
+    document.querySelectorAll(".toggle-button").forEach(btn => {
+      if (btn === button) {
+        btn.classList.add("selected");
+      } else {
+        btn.classList.remove("selected");
+      }
+    });
   });
 });
 
@@ -75,4 +80,6 @@ mapObject.addEventListener("load", function () {
     state.style.cursor = "pointer";
     state.addEventListener("click", () => changeStateColor(state));
   });
+
+  updateCounts();
 });
