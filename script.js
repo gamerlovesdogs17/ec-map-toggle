@@ -14,52 +14,15 @@ const electoralVotes = {
 
 let currentParty = "dem";
 
-// Wait for full DOM and SVG to load
-window.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("dem-btn").onclick = () => currentParty = "dem";
-  document.getElementById("rep-btn").onclick = () => currentParty = "rep";
-  document.getElementById("tossup-btn").onclick = () => currentParty = "tossup";
+function setActiveButton(party) {
+  currentParty = party;
 
-  const mapObj = document.getElementById("map");
-  mapObj.addEventListener("load", () => {
-    const svg = mapObj.contentDocument;
-    if (!svg) {
-      console.error("SVG not accessible");
-      return;
-    }
+  document.getElementById("dem-btn").classList.remove("active");
+  document.getElementById("rep-btn").classList.remove("active");
+  document.getElementById("tossup-btn").classList.remove("active");
 
-    const paths = svg.querySelectorAll("path");
-
-    paths.forEach(path => {
-      const id = path.getAttribute("id");
-      if (!id) return;
-
-      path.setAttribute("state-id", id);
-      path.setAttribute("fill", tossupColor);
-      path.style.cursor = "pointer";
-
-      path.addEventListener("click", () => {
-        const current = path.getAttribute("fill");
-
-        if (currentParty === "dem") {
-          path.setAttribute("fill", demShades.includes(current)
-            ? getNextColor(current, demShades)
-            : demShades[0]);
-        } else if (currentParty === "rep") {
-          path.setAttribute("fill", repShades.includes(current)
-            ? getNextColor(current, repShades)
-            : repShades[0]);
-        } else {
-          path.setAttribute("fill", tossupColor);
-        }
-
-        updateCounters();
-      });
-    });
-
-    updateCounters();
-  });
-});
+  document.getElementById(`${party}-btn`).classList.add("active");
+}
 
 function getNextColor(current, shades) {
   const index = shades.indexOf(current);
@@ -82,3 +45,50 @@ function updateCounters() {
   document.getElementById("rep-count").textContent = rep;
   document.getElementById("tossup-count").textContent = toss;
 }
+
+window.addEventListener("DOMContentLoaded", () => {
+  // Button click handlers
+  document.getElementById("dem-btn").onclick = () => setActiveButton("dem");
+  document.getElementById("rep-btn").onclick = () => setActiveButton("rep");
+  document.getElementById("tossup-btn").onclick = () => setActiveButton("tossup");
+
+  setActiveButton("dem"); // Set default
+
+  const mapObj = document.getElementById("map");
+  mapObj.addEventListener("load", () => {
+    const svg = mapObj.contentDocument;
+    if (!svg) {
+      console.error("SVG not loaded or inaccessible");
+      return;
+    }
+
+    const paths = svg.querySelectorAll("path");
+
+    paths.forEach(path => {
+      const id = path.getAttribute("id");
+      if (!id) return;
+
+      path.setAttribute("state-id", id);
+      path.setAttribute("fill", tossupColor);
+      path.style.cursor = "pointer";
+
+      path.addEventListener("click", () => {
+        const current = path.getAttribute("fill");
+
+        if (currentParty === "dem") {
+          const next = demShades.includes(current) ? getNextColor(current, demShades) : demShades[0];
+          path.setAttribute("fill", next);
+        } else if (currentParty === "rep") {
+          const next = repShades.includes(current) ? getNextColor(current, repShades) : repShades[0];
+          path.setAttribute("fill", next);
+        } else {
+          path.setAttribute("fill", tossupColor);
+        }
+
+        updateCounters();
+      });
+    });
+
+    updateCounters();
+  });
+});
